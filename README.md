@@ -25,7 +25,7 @@ FXRAGE is the hype value of the application, and how it behaves depends on each 
 
 FXFLASH will define when the BEATFLASH is set.
 
-- Constantes
+- VJ Vars
 
 VJ_TIME - Real run time of application (float, in seconds).<br>
 VJ_BPM - Current BPM.<br>
@@ -36,17 +36,11 @@ VJ_BEATTIME4 - Same as VJ_BEATTIME, but will get from 0 to 1 in the spanof time 
 VJ_BEATLEN - The amount of time it takes for a beat to happen (it's the inverse of VJ_BEATTIME).<br>
 VJ_BEATLEN4 - Same as VJ_BEATLEN3, but the amount of time it takes for 4 beats ot happen.
 
-- Helpers
+- DIY
 
-A few helpers are available, including a lerp function, a common palette for palette effects, and so.
+It's very easy to create your own effects, and it's encouraged if you plan to do your own VJ gig!<br>
+Make a new draw function for your effect, and make sure it runs at 60 fps, then add the function to the VJ_LOOPS array.<br>
 
-- Expand
+- To Do
 
-If you want to create your own effects (encouraged if you plan to doyour own VJ gig!), you can
-Make a new draw function for your effect, and make sure it runs at 60 fps.<br>
-Add the name of the draw function to VJ_LOOPS array.<br>
-
-- ToDo
-
-Add a super simple TV Overlay effect, were users could write using the keyboard.<br>
-Would be great to add a second set of scenes for overlay, but that might complicate user input and haven't thought much about that.
+I am working on a simple TV Overlay effect, were users could write text for using the keyboard.<br>
