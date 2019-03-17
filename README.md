@@ -1,10 +1,10 @@
 # PicoVJ
 
-A functional VJ framework for PICO8! It is very scoped and usable with a single controller.
+A functional VJ framework for PICO8! It is very scoped and usable with a single controller (6 buttons).
 
 # Instructions 
 
-You can try the commands in the main menu, to get the feel.
+You can try the commands in the main menu to get the feel. During the scenes all commands work as intended, but you won't get the debug values on screen.
 
 - Beat manager
 
@@ -21,11 +21,14 @@ Z + LEFT / RIGHT - previous / next scene (cycled).<br>
 UP / DOWN - increase / decrease FXRAGE from 0 to 1.<br>
 RIGHT - cycle FXFLASH value from 0 to 5.<br>
 
-FXRAGE is the hype value of the application, and how it behaves depends on each effect implementation. An effect at FXRAGE = 0 would be simple, slow, but the same effect at FXRAGE = 1 would be much faster and frenzy.
+FXRAGE is the hype value of the application, and how it behaves depends on each effect implementation. A scene at FXRAGE = 0 would be simple, slow, but the same scene at FXRAGE = 1 would be much faster and frenzy.<br>
+FXFLASH will define when the BEATFLASH is set, and again it is up to the scene  to implement.
 
-FXFLASH will define when the BEATFLASH is set.
+- Expand!
 
-- Constantes
+It's very easy to create your own effects, and it's encouraged if you plan to do your own VJ gig!<br>
+Make a new draw function for your effect, and make sure it runs at 60 fps, then add the function to the VJ_LOOPS array.<br>
+When writing your own scene, you can use these variables for sync.
 
 VJ_TIME - Real run time of application (float, in seconds).<br>
 VJ_BPM - Current BPM.<br>
@@ -36,17 +39,9 @@ VJ_BEATTIME4 - Same as VJ_BEATTIME, but will get from 0 to 1 in the spanof time 
 VJ_BEATLEN - The amount of time it takes for a beat to happen (it's the inverse of VJ_BEATTIME).<br>
 VJ_BEATLEN4 - Same as VJ_BEATLEN3, but the amount of time it takes for 4 beats ot happen.
 
-- Helpers
+- To Do
 
-A few helpers are available, including a lerp function, a common palette for palette effects, and so.
+I am working on a simple TV Overlay effect, were users could write text for using the keyboard.<br>
+I don't have any more plans for this, except write some scene from time to time.
 
-- Expand
-
-If you want to create your own effects (encouraged if you plan to doyour own VJ gig!), you can
-Make a new draw function for your effect, and make sure it runs at 60 fps.<br>
-Add the name of the draw function to VJ_LOOPS array.<br>
-
-- ToDo
-
-Add a super simple TV Overlay effect, were users could write using the keyboard.<br>
-Would be great to add a second set of scenes for overlay, but that might complicate user input and haven't thought much about that.
+Enjoy!
