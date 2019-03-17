@@ -15,9 +15,10 @@ vj_fxflash=0
 
 function vj_load()
  -- all scenes
- vj_loops[0]=plasma
- --vj_loops[0]=vj_menu
- --vj_loops[1]=twistdither
+ vj_loops[0]=vj_menu
+ vj_loops[1]=twistdither
+ vj_loops[2]=plasma
+ vj_loops[3]=octopus
 end
 
 function _update60()
@@ -118,7 +119,7 @@ function vj_menu()
  info() 
 end
 
--- overlays
+-- overlay
 ol_editing=false
 ol_time=0
 function vj_overlay()
@@ -137,7 +138,7 @@ function vj_overlay()
  if (vj_flash>0.8) rectfill(0,0,128,128,7)
 end
 -->8
--- twisted cylinder
+-- dithered twist
 -- @jordi_ros
 function segment(x,y)
 d=64
@@ -146,12 +147,15 @@ b=d/(x-2)
 vx=x*a+d
 vy=y*b+d
 if(vx>vy)return
-fillp(23130)c=lerp(vy/vx+10.6,7,vj_beatflash)
-r=0.8+vj_beatflash+sin(i*.2+v*3)/8
-x=x*a*r+d
-y=y*b*r+d
+fillp(23130)
+r=0.8+vj_beatflash*2+sin(i*.2+v*3)/8
+x=x*a*r+d+sin(i/3+v*2)*vj_fxrage*10
+y=y*b*r+d+sin(i/3+v*2)*vj_fxrage*10
+c=vy/vx
+s=1+vj_beatflash*2
+col=vj_fxrage<.5 and flr(c+11)+16*flr(c+11.5) or cpal[vj_beatnum2+1][flr(c+1)]+16*cpal[vj_beatnum2+4][flr(c+1.5)]
 for k=0,3 do
-line(x,i*a+d+k,y,i*b+d+k,flr(c)+16*flr(c+.5))
+line(x,i*a+d+k*s,y,i*b+d+k*s,col)
 end end
 
 function twistdither()
@@ -169,6 +173,7 @@ segment(y,x)
 end end
 
 -->8
+-- plasma effect
 function plasma()
 cls()
 --vj_flash=vj_beatflash
@@ -193,19 +198,20 @@ info()
 end
 
 -->8
-r=250
+-- octopus
+r=180
 function octopus()
 cls()
 k=flr(lerp(2,0,vj_fxrage))
-for j=k,4 do
-v=vj_beattime4+j/lerp(300,100,vj_fxrage)
+for j=k,5 do
+v=vj_beattime4+j/lerp(200,100,vj_fxrage)+(vj_beatflash-j/4)*.05
 for i=0,r+1 do
-p=sin(v)*5+20+(sin(i/100)^4)*40+vj_beatflash*10
+p=sin(v)*10+20+(sin(i/60)^4)*40+vj_beatflash*10+j*(vj_fxrage*10+1)-30*(vj_fxrage)
 a=i/r-.3*sin(p/r-v)
-x=sin(a)*p+64
+x=sin(a)*p*(vj_beatflash*4+1)+64
 y=-cos(a)*p+64
 c=vj_fxrage<.5 and 0 or vj_beatnum
-if(i>0)line(n,m,x,y,cpal[c+1][j+1])
+if(i>0)line(n,m,x,y,cpal[c+1][j])
 n,m=x,y
 end end end
 
