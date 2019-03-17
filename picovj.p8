@@ -3,7 +3,6 @@ version 16
 __lua__
 -- picovj
 -- @jordi_ros
--- vj
 vj_loops={}
 vj_scene=0
 vj_bpm=120
@@ -19,19 +18,21 @@ function vj_load()
  vj_loops[1]=twistdither
  vj_loops[2]=plasma
  vj_loops[3]=octopus
+ vj_loops[4]=scroller
+ vj_loops[5]=twistwire
 end
 
 function _update60()
  vj_load()
  vj_time=t()/2 -- because 60fps
  vj_flash=0
- if btn(4) and vj_scene>1 then
+ if btn(4) and vj_scene>0 then
   -- scene manager
-  if (btnp(⬆️)) vj_scene=rnd(#vj_loops-1)+1
+  if (btnp(⬆️)) vj_scene=flr(rnd(#vj_loops))+1
   if (btnp(⬅️)) vj_scene-=1
   if (btnp(➡️)) vj_scene+=1
-  if (btnp(⬇️)) vj_scene=0
-  if (vj_scene<1) vj_scene=#vj_loops
+  if (btnp(⬇️)) vj_scene=1 
+  if (vj_scene<1) vj_scene=#vj_loops-1
   if (vj_scene>#vj_loops) vj_scene=1
  elseif btn(5) then
   -- bpm manager
@@ -107,6 +108,7 @@ cpal={
  {0,2,8,14,7},
  {1,2,8,9,10},
  {1,12,13,14,15},
+ {1,5,6,7,7},
 }
 -->8
 -- main menu
@@ -140,7 +142,7 @@ end
 -->8
 -- dithered twist
 -- @jordi_ros
-function segment(x,y)
+function td_segment(x,y)
 d=64
 a=d/-(y+2)
 b=d/(x-2)
@@ -166,17 +168,17 @@ a=sin(v*.5+.5+j/2)/2
 x=-sin(a)
 y=cos(a)
 i=j*17
-segment(x,-y)
-segment(-x,y)
-segment(-y,-x)
-segment(y,x)
+td_segment(x,-y)
+td_segment(-x,y)
+td_segment(-y,-x)
+td_segment(y,x)
 end end
 
 -->8
 -- plasma effect
+-- @jordi_ros
 function plasma()
 cls()
---vj_flash=vj_beatflash
 for y=0,23 do
 for x=0,23 do
 v=vj_beattime2+(vj_fxrage<.5 and 0 or vj_beatnum2/2)
@@ -199,9 +201,10 @@ end
 
 -->8
 -- octopus
-r=180
+-- @jordi_ros
 function octopus()
 cls()
+r=180
 k=flr(lerp(2,0,vj_fxrage))
 for j=k,5 do
 v=vj_beattime4+j/lerp(200,100,vj_fxrage)+(vj_beatflash-j/4)*.05
@@ -213,6 +216,57 @@ y=-cos(a)*p+64
 c=vj_fxrage<.5 and 0 or vj_beatnum
 if(i>0)line(n,m,x,y,cpal[c+1][j])
 n,m=x,y
+end end end
+
+-->8
+-- text scroller
+-- @jordi_ros
+function scroller()
+cls()
+text="picovj scroller"
+v=128*(vj_time%5)
+?text,0,0,1
+for k=0,#text*40 do
+i=k%5j=flr(k/5)
+p=vj_beatflash*5
+x=j*9+128-v
+y=i*9+25+9*sin(x/128)
+c=vj_beatflash>0 and 8 or 13
+if(pget(j,i)>0) then
+ r=3+2*sin((x*1.3-50+y*1.4)/128)+p
+ circfill(x,y,r+1,c+2)
+ circfill(x,y,r,c+1)
+ ?"☉",x-3,y-2,c
+end
+x=-vj_time*64+k*9
+y=82+i*(5+i)
+line(0,y,128,y,c)
+line(x,82,(x-64)*4+64,128,1)
+end end
+
+-->8
+-- wireframe twist
+-- @jordi_ros
+function tw_segment(u,j)
+u+=.2+v+j*.1
+f=.7+sin(v+j*.1)*.8*((sin(j/4+v)*vj_fxrage))
+x=f*cos(u)
+y=-f*sin(u)
+a=64/-(y+2)+sin(vj_fxbeatflash)*30
+b=64/(x-2)
+return x*a+64,j*a+64,y*b+64,j*b+64 end
+
+function twistwire()
+cls()
+v=vj_beattime4
+for j=-3,1.5,lerp(.2,.05,vj_beatflash) do
+for k=0,1,lerp(.25,.1,vj_fxrage) do
+c=cpal[vj_fxrage<.5 and 1 or vj_beatnum+1]
+if (vj_beatflash>0) c=cpal[7]
+g,h,n,m=tw_segment(k,j)
+line(g,h,n,m,g<n and c[3] or c[2])
+e,r=tw_segment(k,j-.2)
+line(g,h,e,r,c[4])
 end end end
 
 __gfx__
