@@ -32,7 +32,7 @@ function _update60()
   if (btnp(⬅️)) vj_scene-=1
   if (btnp(➡️)) vj_scene+=1
   if (btnp(⬇️)) vj_scene=1 
-  if (vj_scene<1) vj_scene=#vj_loops-1
+  if (vj_scene<1) vj_scene=#vj_loops
   if (vj_scene>#vj_loops) vj_scene=1
  elseif btn(5) then
   -- bpm manager
@@ -250,8 +250,8 @@ end end
 function tw_segment(u,j)
 u+=.2+v+j*.1
 f=.7+sin(v+j*.1)*.8*((sin(j/4+v)*vj_fxrage))
-x=f*cos(u)
-y=-f*sin(u)
+x=f*cos(u)*(vj_beatflash/2+1)
+y=-f*sin(u)*(vj_beatflash/2+1)
 a=64/-(y+2)+sin(vj_fxbeatflash)*30
 b=64/(x-2)
 return x*a+64,j*a+64,y*b+64,j*b+64 end
@@ -261,12 +261,11 @@ cls()
 v=vj_beattime4
 for j=-3,1.5,lerp(.2,.05,vj_beatflash) do
 for k=0,1,lerp(.25,.1,vj_fxrage) do
-c=cpal[vj_fxrage<.5 and 1 or vj_beatnum+1]
-if (vj_beatflash>0) c=cpal[7]
+c=sin(v+j/10)*4+9
 g,h,n,m=tw_segment(k,j)
-line(g,h,n,m,g<n and c[3] or c[2])
+line(g,h,n,m,c)
 e,r=tw_segment(k,j-.2)
-line(g,h,e,r,c[4])
+line(g,h,e,r,c)
 end end end
 
 __gfx__
