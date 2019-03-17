@@ -33,8 +33,7 @@ VJ_BPM - Current BPM.<br>
 VJ_BEAT - Gets set to 1 on every beat, gets to 0 in a few frames.<br>
 VJ_BEATFLASH - Same as VJ_BEAT, but it only gets set to 1 depending on FXFLASH value. If FXFLASH = 1, VJ_BEATFLASH will get to 1 only on the first beat (of 4). If FXFLASH = 3, it will get to 1 on the 2nd and 4th beats. There's a few variations.<br>
 VJ_BEATTIME - Run time of application normalized to beats. It will go from 0 to 1 in the span of time it takes a beat (so it will change dynamically as you update BPM). It can be used to make your loops sync with the beat easy.<br>
-VJ_BEATTIME4 - Same as VJ_BEATTIME, but will get from 0 to 1 in the spanof time it takes 4 beats.<br>
 VJ_BEATLEN - The amount of time it takes for a beat to happen (it's the inverse of VJ_BEATTIME).<br>
-VJ_BEATLEN4 - Same as VJ_BEATLEN3, but the amount of time it takes for 4 beats ot happen.
+VJ_BEATNUM - Number of current beat, from 0 to 3.<br>
 
 Enjoy!
