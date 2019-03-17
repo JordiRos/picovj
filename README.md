@@ -1,10 +1,10 @@
 # PicoVJ
 
-A functional VJ framework for PICO8! It is very scoped and usable with a single controller.
+A functional VJ framework for PICO8! It is very scoped and usable with a single controller (6 buttons).
 
 # Instructions 
 
-You can try the commands in the main menu, to get the feel.
+You can try the commands in the main menu to get the feel. During the scenes all commands work as intended, but you won't get the debug values on screen.
 
 - Beat manager
 
