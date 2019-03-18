@@ -42,7 +42,7 @@ function _update60()
   if (btnp(⬇️)) vj_bpm-=0.05
   if (btnp(⬅️)) vj_bpmstart-=0.02
   if (btnp(➡️)) vj_bpmstart+=0.02
-  vh_beatinfo=vj_time
+  vj_beatinfo=vj_time
  else
   -- fx manager
   if (btnp(⬆️)) vj_fxrage=mid(0,1,vj_fxrage+0.1)
@@ -59,7 +59,7 @@ function _update60()
     vj_bpmstart=vj_time
     vj_beatsync=0
    end
-   vh_beatinfo=vj_time
+   vj_beatinfo=vj_time
   end
  end
  -- vj vars
@@ -71,7 +71,7 @@ function _update60()
  vj_beattime4=vj_beattime/4
  vj_beatnum=flr(vj_beattime)%4
  vj_beatnum2=flr(vj_beatnum/2)
- vj_beat=1-mid(0,((vj_time-vj_bpmstart)%vj_beatlen)*3,1)
+ vj_beat=1-mid(0,((vj_time-vj_bpmstart)%vj_beatlen)*5,1)
  vj_beat2=(vj_beatnum==0 or vj_beatnum==2) and vj_beat or 0
  vj_beatflash=0
  if vj_fxflash==1 then
@@ -141,7 +141,15 @@ function vj_overlay()
  end
  -- flash
  if (vj_flash>0.8) rectfill(0,0,128,128,7)
+ -- beat info
+ if (vj_time - vj_beatinfo < 8) then
+  for i=0,vj_beatnum do
+   line(0,127-i,1,127-i,flr(5+vj_beat*2))
+   line(126,127-i,127,127-i,flr(5+vj_beat*2))
+  end
+ end
 end
+
 -->8
 -- dithered twist
 -- @jordi_ros
