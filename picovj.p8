@@ -13,13 +13,15 @@ vj_fxrage=0
 vj_fxflash=0
 
 function vj_load()
- -- all scenes
  vj_loops[0]=vj_menu
  vj_loops[1]=twistdither
  vj_loops[2]=plasma
  vj_loops[3]=octopus
  vj_loops[4]=scroller
  vj_loops[5]=twistwire
+ vj_loops[6]=rings
+ vj_loops[7]=cube3d
+ vj_loops[8]=cubeinside
 end
 
 function _update60()
@@ -70,6 +72,7 @@ function _update60()
  vj_beatnum=flr(vj_beattime)%4
  vj_beatnum2=flr(vj_beatnum/2)
  vj_beat=1-mid(0,((vj_time-vj_bpmstart)%vj_beatlen)*3,1)
+ vj_beat2=(vj_beatnum==0 or vj_beatnum==2) and vj_beat or 0
  vj_beatflash=0
  if vj_fxflash==1 then
   vj_beatflash=(vj_beatnum==0) and vj_beat or 0
@@ -174,7 +177,6 @@ td_segment(-y,-x)
 td_segment(y,x)
 end end
 
--->8
 -- plasma effect
 -- @jordi_ros
 function plasma()
@@ -199,7 +201,6 @@ end end
 info()
 end
 
--->8
 -- octopus
 -- @jordi_ros
 function octopus()
@@ -218,16 +219,16 @@ if(i>0)line(n,m,x,y,cpal[c+1][j])
 n,m=x,y
 end end end
 
--->8
 -- text scroller
 -- @jordi_ros
 function scroller()
 cls()
 text="picovj scroller"
-v=128*(vj_time%5)
+v=128*(vj_time%(#text/2.5))
 ?text,0,0,1
-for k=0,#text*40 do
-i=k%5j=flr(k/5)
+for k=0,#text*24 do
+i=k%5
+j=flr(k/5)
 p=vj_beatflash*5
 x=j*9+128-v
 y=i*9+25+9*sin(x/128)
@@ -238,13 +239,12 @@ if(pget(j,i)>0) then
  circfill(x,y,r,c+1)
  ?"☉",x-3,y-2,c
 end
-x=-vj_time*64+k*9
+x=-(vj_time%10)*64+k*9
 y=82+i*(5+i)
 line(0,y,128,y,c)
 line(x,82,(x-64)*4+64,128,1)
 end end
 
--->8
 -- wireframe twist
 -- @jordi_ros
 function tw_segment(u,j)
@@ -267,6 +267,72 @@ line(g,h,n,m,c)
 e,r=tw_segment(k,j-.2)
 line(g,h,e,r,c)
 end end end
+
+-- rings
+-- @jordi_ros
+function rings()
+for i=0,700 do
+v=i*0+vj_time*.5*(vj_fxrage+1)
+a=rnd(360)
+r=rnd(64)
+x=sin(a)*r
+y=-cos(a)*r
+r=sqrt(x^2+y^2)/lerp(lerp(16,32,vj_beat2),2,vj_beatflash)
+k=r*2+vj_beatflash^2*2
+c=vj_fxrage<.5 and cpal[4] or cpal[vj_beatnum2+5]
+circfill(
+(x+sin(v*.6)*20)*1.5+64,
+(y+sin(v*.5)*20)*1.5+64,r/4+1,c[flr(k+1)])
+end end
+
+-- cube 3d
+function c3d_point(x,y,z)
+n,m=cos(v/6),sin(v/6)
+x,z=x*n-z*m,x*m+z*n
+n,m=cos(x/50+v/6),sin(y/50+v/8+vj_fxrage*x/30)
+y,z=y*n-z*m,y*m+z*n
+r=vj_beatflash
+w=(70-r*80)/(z-13)
+x=x*w+64
+y=y*w+64
+q=z*.4+(vj_fxrage<.5 and 8 or 8+vj_beatnum2*4)
+if (pget(x,y)<q) circfill(x,y,z*.5,q)
+end
+
+function cube3d()
+cls()
+v=vj_beattime2*(vj_fxrage+1)+(vj_fxrage<.25 and 0 or vj_beatnum2)
+for j=-5,5 do
+for i=-5,5 do
+for k=-5,5 do
+c3d_point(i,j,k)end end end
+end
+
+-- cube inside
+-- @jordi_ros
+function ci_point(x,y,z)
+a=v/7
+x,z=x*cos(a)-z*sin(a),x*sin(a)+z*cos(a)
+a=v/5
+z,y=z*cos(a)-y*sin(a),z*sin(a)+y*cos(a)
+r=vj_beatflash
+w=(110-r*20)/(z-9-r*8)
+x=x*w+64
+y=y*w+64
+q=z*.4+(vj_fxrage<.5 and 8 or 5+vj_beatnum*2.5)
+if (pget(x,y)<q) circfill(x,y,z*.8,q)
+end
+
+function cubeinside()
+cls()
+v=vj_beattime4*(vj_fxrage/2+1)+(vj_fxrage<.25 and 0 or vj_beatnum2)
+for j=-5,5 do
+for i=-5,5 do
+for k=-5,5 do
+ ci_point(i,j+cos(v+k/20),k)
+end end end
+end
+
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
